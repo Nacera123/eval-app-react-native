@@ -9,59 +9,27 @@ import {
     Pressable,
     useWindowDimensions
 } from 'react-native';
-import { COLORS } from '../constants/COLORS';
 import data from '../assets/data';
-import Test from '../components/ui/test'
 
 export default function CategoryList() {
     const { width } = useWindowDimensions();
-
     const navigation = useNavigation();
 
-    const onPressHandler = (category) => navigation.push("categoryDetail", category);
+    const onPressHandler = (category) => navigation.push("categoryDetail", { category });
 
-    const renderCategoryItem = ({ item }) => {
-        return (
-            // <View style={styles.container}>
-            //     <Text style={styles.title}>For you</Text>
-            //     <View style={styles.cardContainer}>
-            //         {data?.map((item, index) => (
-            //             <Pressable
-            //                 key={index}
-            //                 onPress={() => onPressHandler(item)}
-            //                 style={[styles.containerCategory, { width: width / 2 - 80 }]}
-            //             >
-            //                 <Image source={item.image} style={styles.image} />
-            //                 <View style={styles.textContainer}>
-            //                     <Text style={styles.name}>{item.category}</Text>
-            //                 </View>
-            //             </Pressable>
-            //         ))}
-            //     </View>
-            // </View>
-            <View>
-                {data?.map((item, index) => (
-                    <TouchableOpacity
-                        style={styles.categoryItem}
-                        key={index}
-                        onPress={() => onPressHandler(item)}
-                    // onPress={() => navigation.navigate('categoryDetail', { products: item.products })}
-                    //onPress={() => navigation.push('categoryDetail')}
-                    >
-                        <Image source={item.image} style={styles.categoryImage} resizeMode='contain' />
-                        <Text style={styles.categoryName}>{item.category}</Text>
-                    </TouchableOpacity>
+    const renderCategoryItem = ({ item }) => (
+        <TouchableOpacity
+            style={styles.categoryItem}
+            onPress={() => onPressHandler(item)}
+        >
+            <Image source={item.image} style={styles.categoryImage} resizeMode='contain' />
+            <Text style={styles.categoryName}>{item.category}</Text>
+        </TouchableOpacity>
+    );
 
-                ))
-                }
-            </View>
-
-        );
-    };
     return (
         <View style={styles.container}>
-
-            <Text style={styles.textcont}>For you</Text>
+            <Text style={styles.textcont}>Pour vous</Text>
             <FlatList
                 data={data}
                 numColumns={2}

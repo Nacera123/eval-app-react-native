@@ -1,27 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { COLORS } from "./constants/COLORS";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from '@react-navigation/native';
-import OnBoardingScreen from './screens/onBoardingScreen';
-import CategoryScreen from './screens/CategoryScreen';
-import CategoryDetailScreen from './screens/CategoryDetailScreen'
-
-const Stack = createNativeStackNavigator();
-
-
+import * as SplashScreen from "expo-splash-screen"
+import RootNavigation from "./navigation/RootNavivation"
+import { useCallback } from 'react';
+import { View } from "react-native";
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='onBoarding'>
-        <Stack.Screen name='onBoarding' options={{ headerShown: false }}
-          component={OnBoardingScreen} />
-        <Stack.Screen name='category' component={CategoryScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='categoryDetail' component={CategoryDetailScreen} options={{ headerShown: false }} />
+  const [alreadyLaunched, setAlreadyLaunched] = useState(false);
 
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+  useEffect(() => {
+    (async function () {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        const data = await AsyncStorage.getItem('alreadyLaunched');
+        if (data) {
+          setAlreadyLaunched(true);
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await SplashScreen.hideAsync();
+      }
+    })();
+  }, []);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <RootNavigation />
+      <StatusBar style="light" />
+    </View>
   );
 }
+
 
